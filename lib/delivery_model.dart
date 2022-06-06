@@ -1,12 +1,28 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import 'app/form/enums/input_type.dart';
 import 'app/form/interfaces/form.dart';
 import 'app/form/models/form_item.dart';
 
+class Place {
+  int? id;
+  String? name;
+
+  Place({
+    this.id,
+    this.name,
+  });
+
+  @override
+  String toString() => '$name';
+}
+
 class DeliveryModel implements FormInterface {
   String? recipient;
   String? address;
+  Place? place;
   String? phone;
   DateTime? day;
   TimeOfDay? hour;
@@ -14,6 +30,7 @@ class DeliveryModel implements FormInterface {
   DeliveryModel({
     this.recipient,
     this.address,
+    this.place,
     this.phone,
     this.day,
     this.hour,
@@ -23,6 +40,7 @@ class DeliveryModel implements FormInterface {
     final model = DeliveryModel();
     if (map['recipient'] != null) model.recipient = map['recipient'];
     if (map['address'] != null) model.address = map['address'];
+    if (map['place'] != null) model.place = map['place'];
     if (map['phone'] != null) model.phone = map['phone'];
     if (map['day'] != null) model.day = map['day'];
     if (map['hour'] != null) model.hour = map['hour'];
@@ -46,6 +64,17 @@ class DeliveryModel implements FormInterface {
         key: 'address',
         value: address,
         type: InputType.textArea,
+      ),
+      FormItem(
+        label: 'Local',
+        key: 'place',
+        value: place,
+        type: InputType.selectBox,
+        items: [
+          Place(id: 1, name: 'Paracatu'),
+          Place(id: 2, name: 'Brasília'),
+          Place(id: 3, name: 'Unaí'),
+        ],
       ),
       FormItem(
         label: 'Telefone',

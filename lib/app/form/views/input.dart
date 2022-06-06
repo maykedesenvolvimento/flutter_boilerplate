@@ -89,6 +89,12 @@ class Input extends StatelessWidget {
       }
     }
 
+    onSelect(dynamic val) {
+      final selected =
+          item.items.firstWhere((e) => e.toString() == val.toString());
+      onChange!(selected);
+    }
+
     return SizedBox(
       width: width,
       height: (item.type == InputType.textArea ? 15 : 6) * spacing,
@@ -100,7 +106,7 @@ class Input extends StatelessWidget {
               focusNode: node,
               selectedItem: item.value,
               showSearchBox: item.type != InputType.selectBox,
-              onChanged: onChange,
+              onChanged: onSelect,
             )
           : TextField(
               cursorHeight: textSize,
