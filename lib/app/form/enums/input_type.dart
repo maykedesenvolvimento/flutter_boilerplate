@@ -3,5 +3,6 @@ enum InputType {
   time,
   text,
   textArea,
-  selectBox,
+  selection,
+  multiSelection,
 }

@@ -68,8 +68,8 @@ class DeliveryModel implements FormInterface {
       FormItem(
         label: 'Local',
         key: 'place',
-        value: place,
-        type: InputType.selectBox,
+        value: null,
+        type: InputType.multiSelection,
         items: [
           Place(id: 1, name: 'Paracatu'),
           Place(id: 2, name: 'Brasília'),
