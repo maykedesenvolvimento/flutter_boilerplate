@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/app/form/views/select_box.dart';
+import 'package:flutter_boilerplate/app/form/views/select_item.dart';
 import '../../definitions/sizes.dart';
 import '../../definitions/text.dart';
 import '../enums/input_type.dart';
@@ -30,17 +31,11 @@ class Input extends StatelessWidget {
 
   TextInputType get inputType {
     switch (item.type) {
-      case InputType.date:
-        return TextInputType.none;
-      case InputType.time:
-        return TextInputType.none;
       case InputType.text:
         return TextInputType.text;
       case InputType.textArea:
         return TextInputType.multiline;
-      case InputType.selection:
-        return TextInputType.none;
-      case InputType.multiSelection:
+      default:
         return TextInputType.none;
     }
   }
@@ -54,15 +49,16 @@ class Input extends StatelessWidget {
           size: textSize,
           color: Colors.black.withOpacity(0.6),
         ),
+        floatingLabelBehavior: isSelectBox
+            ? FloatingLabelBehavior.always
+            : FloatingLabelBehavior.auto,
         border: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
         ),
       );
 
-  bool get readOnly => [
-        InputType.date,
-        InputType.time,
-      ].contains(item.type);
+  bool get readOnly => readOnlyTypes.contains(item.type);
+  bool get isSelectBox => selectBoxTypes.contains(item.type);
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +84,7 @@ class Input extends StatelessWidget {
           onChange(selected);
           controller.text = item.toString();
         }
-      } else if ([
-        InputType.selection,
-        InputType.multiSelection,
-      ].contains(item.type)) {
+      } else if (isSelectBox) {
         showModalBottomSheet(
           context: context,
           builder: (_) {
@@ -105,7 +98,6 @@ class Input extends StatelessWidget {
                       : [item.value],
               onChange: (value) {
                 onChange(value);
-                controller.text = item.toString();
               },
             );
           },
@@ -116,18 +108,46 @@ class Input extends StatelessWidget {
     return SizedBox(
       width: width,
       height: (item.type == InputType.textArea ? 15 : 6) * spacing,
-      child: TextField(
-        cursorHeight: textSize,
-        decoration: decoration,
-        controller: controller,
-        focusNode: node,
-        onChanged: onChange,
-        readOnly: readOnly,
-        onTap: onTap,
-        keyboardType: item.type == InputType.textArea
-            ? TextInputType.multiline
-            : TextInputType.text,
-        maxLines: item.type == InputType.textArea ? 5 : 1,
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          TextField(
+            cursorHeight: textSize,
+            decoration: decoration,
+            controller: controller,
+            focusNode: node,
+            onChanged: onChange,
+            readOnly: readOnly,
+            style: AppText.style(),
+            onTap: onTap,
+            keyboardType: item.type == InputType.textArea
+                ? TextInputType.multiline
+                : TextInputType.text,
+            maxLines: item.type == InputType.textArea ? 5 : 1,
+          ),
+          if (isSelectBox && item.value != null)
+            item.value is List
+                ? Row(
+                    children: (item.value as List)
+                        .map(
+                          (e) => SelectItem(
+                            height: spacing * 4,
+                            label: e.toString(),
+                            onClose: () {
+                              onChange((item.value as List)
+                                  .where(
+                                      (item) => e.toString() != item.toString())
+                                  .toList());
+                            },
+                          ),
+                        )
+                        .toList(),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: AppText.build(item.value.toString()),
+                  )
+        ],
       ),
     );
   }

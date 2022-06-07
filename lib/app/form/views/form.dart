@@ -28,6 +28,8 @@ class _FormState extends State<AppForm> {
     return TextEditingController(text: item.toString());
   }).toList();
 
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -54,12 +56,18 @@ class _FormState extends State<AppForm> {
         }).toList(),
         Button(
           label: 'Salvar',
+          loading: loading,
+          size: AppSize.medium,
           onClick: () {
             final Map<String, dynamic> map = {};
             items.map((e) {
               map[e.key] = e.value;
             }).toList();
             widget.onSave(map);
+
+            setState(() {
+              loading = true;
+            });
           },
         ),
       ],

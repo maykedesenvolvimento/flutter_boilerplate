@@ -19,7 +19,7 @@ class FormItem {
 
   @override
   String toString() {
-    if (value == null) return '';
+    if (value == null || selectBoxTypes.contains(type)) return '';
     switch (type) {
       case InputType.date:
         return (value as DateTime).showDate();

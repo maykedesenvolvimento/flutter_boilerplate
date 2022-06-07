@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/app/definitions/text.dart';
-import 'package:flutter_boilerplate/app/form/views/button.dart';
+import '../../definitions/text.dart';
+import '../../form/views/button.dart';
 
 class SelectBox extends StatefulWidget {
   final List<dynamic> selectedItems;
@@ -28,13 +28,45 @@ class _SelectBoxState extends State<SelectBox> {
 
   final double checkBoxSize = 48;
 
+  final controller = TextEditingController();
+
+  EdgeInsets get padding => const EdgeInsets.all(12);
+
+  @override
+  void initState() {
+    controller.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...widget.items.map((e) {
+          Padding(
+            padding: padding,
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                label: AppText.build(
+                  'Search',
+                  color: Colors.black.withOpacity(0.6),
+                ),
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+              ),
+            ),
+          ),
+          ...widget.items
+              .where((e) => e
+                  .toString()
+                  .toLowerCase()
+                  .contains(controller.text.toLowerCase()))
+              .map((e) {
             return InkWell(
               onTap: () {
                 if (widget.multiSelection) {
@@ -71,18 +103,19 @@ class _SelectBoxState extends State<SelectBox> {
               ),
             );
           }).toList(),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Button(
-              icon: Icons.done,
-              circular: true,
-              width: checkBoxSize,
-              onClick: () {
-                widget.onChange(selectedItems);
-                Navigator.pop(context);
-              },
+          if (widget.multiSelection)
+            Padding(
+              padding: padding,
+              child: Button(
+                icon: Icons.done,
+                circular: true,
+                width: checkBoxSize,
+                onClick: () {
+                  widget.onChange(selectedItems);
+                  Navigator.pop(context);
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
