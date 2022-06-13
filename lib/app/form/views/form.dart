@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../definitions/sizes.dart';
 import '../interfaces/form.dart';
 import '../models/form_item.dart';
 import 'input.dart';
@@ -38,11 +37,8 @@ class _FormState extends State<AppForm> {
           final idx = items.indexOf(e);
 
           return Padding(
-            padding: EdgeInsets.only(
-              bottom: AppSizes.spacing(AppSize.small) * 2,
-            ),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Input(
-              size: AppSize.medium,
               controller: controllers[idx],
               node: nodes[idx],
               onChange: (val) {
@@ -57,7 +53,6 @@ class _FormState extends State<AppForm> {
         Button(
           label: 'Salvar',
           loading: loading,
-          size: AppSize.medium,
           onClick: () {
             final Map<String, dynamic> map = {};
             items.map((e) {

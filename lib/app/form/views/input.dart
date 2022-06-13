@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/app/form/views/select_box.dart';
 import 'package:flutter_boilerplate/app/form/views/select_item.dart';
-import '../../definitions/sizes.dart';
 import '../../definitions/text.dart';
 import '../enums/input_type.dart';
 import '../models/form_item.dart';
 
 class Input extends StatelessWidget {
-  final AppSize size;
   final TextEditingController controller;
   final FocusNode node;
   final double? width;
@@ -18,7 +16,6 @@ class Input extends StatelessWidget {
   const Input({
     Key? key,
     required this.item,
-    required this.size,
     required this.controller,
     required this.node,
     required this.onChange,
@@ -26,8 +23,8 @@ class Input extends StatelessWidget {
     this.items = const [],
   }) : super(key: key);
 
-  double get spacing => AppSizes.spacing(size);
-  double get textSize => AppSizes.text(size);
+  double get spacing => 10;
+  double get textSize => 14;
 
   TextInputType get inputType {
     switch (item.type) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../definitions/sizes.dart';
 import '../../definitions/text.dart';
 
 class Button extends StatelessWidget {
@@ -11,7 +10,6 @@ class Button extends StatelessWidget {
   final bool outlined;
   final bool circular;
   final IconData? icon;
-  final AppSize size;
   final double? width;
 
   const Button({
@@ -24,14 +22,13 @@ class Button extends StatelessWidget {
     this.loading = false,
     this.icon,
     this.outlined = false,
-    this.size = AppSize.medium,
     this.width,
   }) : super(key: key);
 
   Color get txtColor => outlined ? color : textColor;
   Color get bgColor => outlined ? textColor : color;
-  double get textSize => AppSizes.text(size);
-  double get spacing => AppSizes.spacing(size);
+  double get textSize => 12;
+  double get spacing => 10;
 
   BorderRadius get radius => BorderRadius.circular(circular ? width! / 2 : 4);
 
